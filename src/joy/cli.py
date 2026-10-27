@@ -21,6 +21,8 @@ from rich.padding import Padding
 from rich.text import Text
 
 from joy.llm import INTERRUPTED_NOTE, SYSTEM_PROMPT, LLMError, StreamWorker, load_config
+from joy.diff_commands import DiffCommandHandler
+from joy.diff_config import DiffConfig
 
 GRAY = "#393939"
 BORDER = "#5c5c5c"
@@ -170,9 +172,13 @@ def main(console: Console | None = None) -> None:
     state: dict = {"waiting": False, "response": ""}
     session = build_session(state)
     history: list[dict] = []
+    
+    # Initialize diff command handler
+    diff_config = DiffConfig.from_env()
+    diff_handler = DiffCommandHandler(".", console, diff_config)
 
     console.print("[bold cyan]Joy[/bold cyan] \u2014 coding agent\n")
-    console.print("Type /exit to exit. Ctrl-C cancels input; Ctrl-D exits.\n")
+    console.print("Type /exit to exit. Type /diff to see changes. Ctrl-C cancels input; Ctrl-D exits.\n")
     try:
         load_config()
     except LLMError as exc:
@@ -194,10 +200,18 @@ def main(console: Console | None = None) -> None:
             break
         if not message:
             continue
+        
+        # Handle /diff command
+        if diff_handler.is_diff_command(message):
+            if diff_handler.handle_diff_command(message):
+                continue
 
         console.print(Padding(Text(PROMPT + message.replace("\n", "\n  ")),
                               (1, 1), style=f"#ffffff on {GRAY}"))
         console.print()
+        
+        # Capture initial state sebelum agent bekerja
+        diff_handler.capture_initial_state()
 
         messages = [{"role": "system", "content": SYSTEM_PROMPT}, *history,
                     {"role": "user", "content": message}]
@@ -208,6 +222,15 @@ def main(console: Console | None = None) -> None:
         reply = state["response"]
         print_reply(console, reply)
         finished = state["outcome"] == "done" and reply.strip()
+        
+        # Detect changes setelah agent selesai
+        if finished and state["used_tools"]:
+            changes = diff_handler.detect_and_track_changes()
+            
+            # Auto display diff jika ada perubahan dan config enabled
+            if changes and diff_handler.should_auto_display_diff(changes):
+                diff_handler.display_auto_diff(changes)
+        
         if finished:
             history += [{"role": "user", "content": message},
                         {"role": "assistant", "content": reply}]
@@ -224,6 +247,10 @@ def main(console: Console | None = None) -> None:
             console.print(Text(INTERRUPTED_NOTE, style="dim"))
         console.print()
         state["response"] = ""
+        
+        # Clear pending changes after displaying them
+        if finished:
+            diff_handler.clear_pending()
 
 
 if __name__ == "__main__":

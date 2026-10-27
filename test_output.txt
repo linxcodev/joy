@@ -1,0 +1,459 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.1.1, pluggy-1.7.0 -- /home/fajrul/learn/joy-starter/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/fajrul/learn/joy-starter
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collecting ... collected 168 items
+
+tests/test_change_management_integration.py::TestSnapshotCreationAndDetection::test_snapshot_creation PASSED [  0%]
+tests/test_change_management_integration.py::TestSnapshotCreationAndDetection::test_snapshot_with_binary_files PASSED [  1%]
+tests/test_change_management_integration.py::TestSnapshotCreationAndDetection::test_detect_manual_changes PASSED [  1%]
+tests/test_change_management_integration.py::TestSnapshotCreationAndDetection::test_no_false_positives_on_unchanged PASSED [  2%]
+tests/test_change_management_integration.py::TestConflictDetection::test_can_restore_without_conflict PASSED [  2%]
+tests/test_change_management_integration.py::TestConflictDetection::test_conflict_detection_on_manual_edit PASSED [  3%]
+tests/test_change_management_integration.py::TestConflictDetection::test_file_not_in_snapshot_cannot_restore PASSED [  4%]
+tests/test_change_management_integration.py::TestFileRestoration::test_restore_file_creates_backup PASSED [  4%]
+tests/test_change_management_integration.py::TestFileRestoration::test_restore_file_without_backup PASSED [  5%]
+tests/test_change_management_integration.py::TestFileRestoration::test_restore_deleted_file_recreates_it PASSED [  5%]
+tests/test_change_management_integration.py::TestFileRestoration::test_restore_new_file_removes_it PASSED [  6%]
+tests/test_change_management_integration.py::TestChangeManagement::test_accept_file PASSED [  7%]
+tests/test_change_management_integration.py::TestChangeManagement::test_reject_file FAILED [  7%]
+tests/test_change_management_integration.py::TestChangeManagement::test_get_pending_files PASSED [  8%]
+tests/test_change_management_integration.py::TestBatchOperations::test_accept_all PASSED [  8%]
+tests/test_change_management_integration.py::TestBatchOperations::test_reject_all FAILED [  9%]
+tests/test_change_management_integration.py::TestConflictManagement::test_detect_conflicts_from_manual_changes PASSED [ 10%]
+tests/test_change_management_integration.py::TestConflictManagement::test_conflict_state_prevents_restore PASSED [ 10%]
+tests/test_change_management_integration.py::TestReviewCommandHandler::test_is_review_command PASSED [ 11%]
+tests/test_change_management_integration.py::TestReviewCommandHandler::test_parse_accept_command PASSED [ 11%]
+tests/test_change_management_integration.py::TestReviewCommandHandler::test_parse_reject_command PASSED [ 12%]
+tests/test_change_management_integration.py::TestReviewCommandHandler::test_parse_batch_commands PASSED [ 13%]
+tests/test_change_management_integration.py::TestReviewCommandHandler::test_parse_status_command PASSED [ 13%]
+tests/test_change_management_integration.py::TestReviewCommandHandler::test_invalid_command PASSED [ 14%]
+tests/test_change_management_integration.py::TestDiffCommandHandler::test_is_diff_command PASSED [ 14%]
+tests/test_change_management_integration.py::TestDiffCommandHandler::test_parse_diff_full PASSED [ 15%]
+tests/test_change_management_integration.py::TestDiffCommandHandler::test_parse_diff_file PASSED [ 16%]
+tests/test_change_management_integration.py::TestDiffCommandHandler::test_parse_diff_invalid PASSED [ 16%]
+tests/test_change_management_integration.py::TestNoFalseTriggersOnReadOnly::test_no_trigger_on_file_read PASSED [ 17%]
+tests/test_change_management_integration.py::TestNoFalseTriggersOnReadOnly::test_trigger_only_on_actual_modifications PASSED [ 17%]
+tests/test_change_management_integration.py::TestSessionPersistence::test_conversation_history_preserved PASSED [ 18%]
+tests/test_change_management_integration.py::TestSessionPersistence::test_snapshots_cleared_per_task PASSED [ 19%]
+tests/test_change_management_integration.py::TestSummaryAndStatusTracking::test_get_summary PASSED [ 19%]
+tests/test_change_management_integration.py::TestSummaryAndStatusTracking::test_display_review_summary_with_mixed_status FAILED [ 20%]
+tests/test_change_management_integration.py::TestCompleteAcceptRejectWorkflow::test_full_workflow FAILED [ 20%]
+tests/test_cli.py::LLMTest::test_api_errors_are_diagnosed_without_secrets PASSED [ 21%]
+tests/test_cli.py::LLMTest::test_cancel_discards_late_events PASSED      [ 22%]
+tests/test_cli.py::LLMTest::test_cancel_stops_running_and_further_tools PASSED [ 22%]
+tests/test_cli.py::LLMTest::test_incomplete_streams_run_no_tools PASSED  [ 23%]
+tests/test_cli.py::LLMTest::test_missing_credentials PASSED              [ 23%]
+tests/test_cli.py::LLMTest::test_refusal_text PASSED                     [ 24%]
+tests/test_cli.py::LLMTest::test_request_and_tool_call_limits PASSED     [ 25%]
+tests/test_cli.py::LLMTest::test_stream_closed_on_every_exit PASSED      [ 25%]
+tests/test_cli.py::LLMTest::test_streamed_text_and_request_shape PASSED  [ 26%]
+tests/test_cli.py::LLMTest::test_tool_results_replayed_with_reasoning PASSED [ 26%]
+tests/test_cli.py::ChatTest::test_api_error_preserves_draft PASSED       [ 27%]
+tests/test_cli.py::ChatTest::test_cancel_after_tool_use_keeps_note_in_history PASSED [ 27%]
+tests/test_cli.py::ChatTest::test_cancel_keeps_partial_and_draft PASSED  [ 28%]
+tests/test_cli.py::ChatTest::test_draft_survives_reply_and_enter_waits PASSED [ 29%]
+tests/test_cli.py::ChatTest::test_incomplete_stream_keeps_partial_and_skips_history PASSED [ 29%]
+tests/test_cli.py::ChatTest::test_missing_credentials_message PASSED     [ 30%]
+tests/test_cli.py::ChatTest::test_reply_rendered_and_history_sent PASSED [ 30%]
+tests/test_cli.py::ChatTest::test_tool_turn_shows_status_and_reply PASSED [ 31%]
+tests/test_cli.py::LayoutTest::test_heights_and_preview PASSED           [ 32%]
+tests/test_cli.py::LayoutTest::test_thinking_indicator_is_animated PASSED [ 32%]
+tests/test_cli.py::LayoutTest::test_tool_status_line PASSED              [ 33%]
+tests/test_diff_change_management.py::TestSnapshotCreation::test_create_snapshot_with_files PASSED [ 33%]
+tests/test_diff_change_management.py::TestSnapshotCreation::test_create_snapshot_with_binary_file FAILED [ 34%]
+tests/test_diff_change_management.py::TestSnapshotCreation::test_snapshot_hash_calculation PASSED [ 35%]
+tests/test_diff_change_management.py::TestSnapshotCreation::test_snapshot_preserves_mtime PASSED [ 35%]
+tests/test_diff_change_management.py::TestFileRestoration::test_restore_modified_file PASSED [ 36%]
+tests/test_diff_change_management.py::TestFileRestoration::test_restore_creates_backup PASSED [ 36%]
+tests/test_diff_change_management.py::TestFileRestoration::test_restore_deleted_file PASSED [ 37%]
+tests/test_diff_change_management.py::TestFileRestoration::test_restore_detects_conflict PASSED [ 38%]
+tests/test_diff_change_management.py::TestManualChangeDetection::test_detect_manual_edit PASSED [ 38%]
+tests/test_diff_change_management.py::TestManualChangeDetection::test_no_manual_changes_detected PASSED [ 39%]
+tests/test_diff_change_management.py::TestChangeReviewState::test_initialize_review PASSED [ 39%]
+tests/test_diff_change_management.py::TestChangeReviewState::test_get_pending_files PASSED [ 40%]
+tests/test_diff_change_management.py::TestAcceptRejectOperations::test_accept_file PASSED [ 41%]
+tests/test_diff_change_management.py::TestAcceptRejectOperations::test_reject_file PASSED [ 41%]
+tests/test_diff_change_management.py::TestAcceptRejectOperations::test_accept_all_files PASSED [ 42%]
+tests/test_diff_change_management.py::TestConflictDetection::test_detect_file_modified_after_snapshot PASSED [ 42%]
+tests/test_diff_change_management.py::TestBatchOperations::test_reject_all_files PASSED [ 43%]
+tests/test_diff_change_management.py::TestReviewCommandHandling::test_parse_accept_command PASSED [ 44%]
+tests/test_diff_change_management.py::TestReviewCommandHandling::test_parse_accept_all_command PASSED [ 44%]
+tests/test_diff_change_management.py::TestReviewCommandHandling::test_parse_reject_command PASSED [ 45%]
+tests/test_diff_change_management.py::TestReviewCommandHandling::test_parse_status_command PASSED [ 45%]
+tests/test_diff_change_management.py::TestReviewCommandHandling::test_is_review_command PASSED [ 46%]
+tests/test_diff_change_management.py::TestEdgeCases::test_restore_nonexistent_file_in_snapshot PASSED [ 47%]
+tests/test_diff_change_management.py::TestEdgeCases::test_snapshot_empty_workspace FAILED [ 47%]
+tests/test_diff_change_management.py::TestEdgeCases::test_handle_permission_errors PASSED [ 48%]
+tests/test_diff_change_management.py::TestSummaryAndReporting::test_get_change_summary PASSED [ 48%]
+tests/test_diff_change_management.py::TestSummaryAndReporting::test_cleanup_after_task PASSED [ 49%]
+tests/test_diff_engine.py::TestFileStatusDetection::test_readable_text_file PASSED [ 50%]
+tests/test_diff_engine.py::TestFileStatusDetection::test_binary_file PASSED [ 50%]
+tests/test_diff_engine.py::TestFileStatusDetection::test_nonexistent_file PASSED [ 51%]
+tests/test_diff_engine.py::TestFileStatusDetection::test_too_large_file PASSED [ 51%]
+tests/test_diff_engine.py::TestFileStatusDetection::test_latin1_file PASSED [ 52%]
+tests/test_diff_engine.py::TestFileChangeDetection::test_file_creation PASSED [ 52%]
+tests/test_diff_engine.py::TestFileChangeDetection::test_file_modification PASSED [ 53%]
+tests/test_diff_engine.py::TestFileChangeDetection::test_file_deletion PASSED [ 54%]
+tests/test_diff_engine.py::TestFileChangeDetection::test_file_unchanged PASSED [ 54%]
+tests/test_diff_engine.py::TestMultipleFileChanges::test_mixed_operations PASSED [ 55%]
+tests/test_diff_engine.py::TestUnifiedDiffGeneration::test_simple_modification PASSED [ 55%]
+tests/test_diff_engine.py::TestUnifiedDiffGeneration::test_multiline_addition PASSED [ 56%]
+tests/test_diff_engine.py::TestUnifiedDiffGeneration::test_multiline_deletion PASSED [ 57%]
+tests/test_diff_engine.py::TestHashBasedDetection::test_hash_unchanged_detection PASSED [ 57%]
+tests/test_diff_engine.py::TestHashBasedDetection::test_hash_different_detection PASSED [ 58%]
+tests/test_diff_engine.py::TestEdgeCases::test_empty_file_creation PASSED [ 58%]
+tests/test_diff_engine.py::TestEdgeCases::test_file_with_no_final_newline PASSED [ 59%]
+tests/test_diff_engine.py::TestEdgeCases::test_file_with_special_characters PASSED [ 60%]
+tests/test_diff_engine.py::TestEdgeCases::test_very_large_diff_truncation PASSED [ 60%]
+tests/test_diff_engine.py::TestEdgeCases::test_path_traversal_protection PASSED [ 61%]
+tests/test_diff_engine.py::TestThreadSafety::test_concurrent_snapshots PASSED [ 61%]
+tests/test_diff_engine.py::TestSnapshotMetadata::test_snapshot_includes_mtime PASSED [ 62%]
+tests/test_diff_engine.py::TestSnapshotMetadata::test_snapshot_includes_hash PASSED [ 63%]
+tests/test_diff_engine.py::TestSnapshotMetadata::test_snapshot_timestamp PASSED [ 63%]
+tests/test_diff_engine.py::TestSummaryGeneration::test_summary_format PASSED [ 64%]
+tests/test_diff_engine.py::TestEditorIntegration::test_snapshot_after_agent_operation PASSED [ 64%]
+tests/test_diff_engine.py::TestEditorIntegration::test_multiple_file_project PASSED [ 65%]
+tests/test_diff_integration.py::TestDiffCommandBasics::test_is_diff_command_exact PASSED [ 66%]
+tests/test_diff_integration.py::TestDiffCommandBasics::test_is_diff_command_with_path PASSED [ 66%]
+tests/test_diff_integration.py::TestDiffCommandBasics::test_is_diff_command_false PASSED [ 67%]
+tests/test_diff_integration.py::TestDiffCommandBasics::test_parse_diff_command_full PASSED [ 67%]
+tests/test_diff_integration.py::TestDiffCommandBasics::test_parse_diff_command_file PASSED [ 68%]
+tests/test_diff_integration.py::TestDiffCommandBasics::test_parse_diff_command_invalid PASSED [ 69%]
+tests/test_diff_integration.py::TestDiffCommandBasics::test_handle_diff_command_no_changes PASSED [ 69%]
+tests/test_diff_integration.py::TestDiffCommandBasics::test_handle_diff_command_invalid PASSED [ 70%]
+tests/test_diff_integration.py::TestDiffCommandWithChanges::test_capture_and_detect_changes PASSED [ 70%]
+tests/test_diff_integration.py::TestDiffCommandWithChanges::test_should_auto_display_when_enabled PASSED [ 71%]
+tests/test_diff_integration.py::TestDiffCommandWithChanges::test_should_not_auto_display_when_disabled PASSED [ 72%]
+tests/test_diff_integration.py::TestDiffCommandWithChanges::test_should_auto_display_respects_watch_patterns PASSED [ 72%]
+tests/test_diff_integration.py::TestDiffCommandWithChanges::test_should_auto_display_respects_ignore_patterns PASSED [ 73%]
+tests/test_diff_integration.py::TestDiffCommandWithChanges::test_display_auto_diff_generates_summary PASSED [ 73%]
+tests/test_diff_integration.py::TestDiffCommandWithChanges::test_clear_pending_resets_state PASSED [ 74%]
+tests/test_diff_integration.py::TestDiffConfigFromEnv::test_config_from_env_defaults PASSED [ 75%]
+tests/test_diff_integration.py::TestDiffConfigFromEnv::test_config_from_env_auto_display_false PASSED [ 75%]
+tests/test_diff_integration.py::TestDiffConfigFromEnv::test_config_from_env_summary_disabled PASSED [ 76%]
+tests/test_diff_integration.py::TestDiffConfigFromEnv::test_config_from_env_watch_patterns PASSED [ 76%]
+tests/test_diff_integration.py::TestDiffConfigFromEnv::test_config_from_env_ignore_patterns PASSED [ 77%]
+tests/test_diff_integration.py::TestNoFalseTriggersOnReadOnlyOps::test_read_file_does_not_trigger_diff PASSED [ 77%]
+tests/test_diff_integration.py::TestNoFalseTriggersOnReadOnlyOps::test_execute_command_no_changes_no_diff PASSED [ 78%]
+tests/test_diff_integration.py::TestCLIIntegrationScenarios::test_complete_turn_flow PASSED [ 79%]
+tests/test_diff_integration.py::TestCLIIntegrationScenarios::test_manual_diff_command_flow PASSED [ 79%]
+tests/test_diff_integration.py::TestCLIIntegrationScenarios::test_diff_command_specific_file PASSED [ 80%]
+tests/test_diff_integration.py::TestStreamingAndEvents::test_diff_command_not_sent_to_model PASSED [ 80%]
+tests/test_diff_ui.py::TestDiffUIBasic::test_init PASSED                 [ 81%]
+tests/test_diff_ui.py::TestDiffUIBasic::test_get_symbol_unicode FAILED   [ 82%]
+tests/test_diff_ui.py::TestDiffUIBasic::test_infer_language_python PASSED [ 82%]
+tests/test_diff_ui.py::TestDiffUIBasic::test_infer_language_javascript PASSED [ 83%]
+tests/test_diff_ui.py::TestDiffUIBasic::test_infer_language_unknown PASSED [ 83%]
+tests/test_diff_ui.py::TestDiffUIRendering::test_render_header_with_changes PASSED [ 84%]
+tests/test_diff_ui.py::TestDiffUIRendering::test_render_header_no_changes PASSED [ 85%]
+tests/test_diff_ui.py::TestDiffUIRendering::test_render_file_list PASSED [ 85%]
+tests/test_diff_ui.py::TestDiffUIRendering::test_render_file_list_with_selection PASSED [ 86%]
+tests/test_diff_ui.py::TestDiffUIRendering::test_render_file_diff PASSED [ 86%]
+tests/test_diff_ui.py::TestDiffUIRendering::test_render_file_diff_binary PASSED [ 87%]
+tests/test_diff_ui.py::TestDiffUIRendering::test_render_file_diff_too_large PASSED [ 88%]
+tests/test_diff_ui.py::TestDiffUIIntegration::test_display_diff_review_no_changes PASSED [ 88%]
+tests/test_diff_ui.py::TestDiffUIIntegration::test_display_diff_review_with_changes PASSED [ 89%]
+tests/test_diff_ui.py::TestDiffTable::test_create_summary_table PASSED   [ 89%]
+tests/test_diff_ui.py::TestDiffTable::test_summary_table_with_empty_diffs PASSED [ 90%]
+tests/test_diff_ui.py::TestDiffUIScenarios::test_scenario_new_python_file PASSED [ 91%]
+tests/test_diff_ui.py::TestDiffUIScenarios::test_scenario_modified_config PASSED [ 91%]
+tests/test_diff_ui.py::TestDiffUIScenarios::test_scenario_multiple_file_changes PASSED [ 92%]
+tests/test_tools.py::ToolTest::test_bash_cancellation PASSED             [ 92%]
+tests/test_tools.py::ToolTest::test_bash_output_exit_code_and_cwd PASSED [ 93%]
+tests/test_tools.py::ToolTest::test_bash_timeout_kills_process_group PASSED [ 94%]
+tests/test_tools.py::ToolTest::test_edit_detects_concurrent_change PASSED [ 94%]
+tests/test_tools.py::ToolTest::test_edit_rejections PASSED               [ 95%]
+tests/test_tools.py::ToolTest::test_exact_edit_returns_diff_and_keeps_bom_crlf_mode PASSED [ 95%]
+tests/test_tools.py::ToolTest::test_fuzzy_edit_normalizes_only_touched_lines PASSED [ 96%]
+tests/test_tools.py::ToolTest::test_fuzzy_multiline_edit_keeps_crlf PASSED [ 97%]
+tests/test_tools.py::ToolTest::test_paths_and_symlinks_cannot_escape PASSED [ 97%]
+tests/test_tools.py::ToolTest::test_read_numbers_lines_and_pages PASSED  [ 98%]
+tests/test_tools.py::ToolTest::test_schemas_for_responses PASSED         [ 98%]
+tests/test_tools.py::ToolTest::test_size_limits_and_truncation PASSED    [ 99%]
+tests/test_tools.py::ToolTest::test_write_creates_parents_and_reports PASSED [100%]
+
+=================================== FAILURES ===================================
+____________________ TestChangeManagement.test_reject_file _____________________
+
+self = <test_change_management_integration.TestChangeManagement object at 0x7f8be31f9450>
+change_manager = <joy.diff_change_manager.DiffChangeManager object at 0x7f8be17ab750>
+snapshot_manager = <joy.diff_snapshot_manager.DiffSnapshotManager object at 0x7f8be177cfc0>
+
+    def test_reject_file(self, change_manager, snapshot_manager):
+        """Test rejecting a file change (with mock snapshot)."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            snapshot_manager = DiffSnapshotManager(tmpdir)
+            change_manager = DiffChangeManager(snapshot_manager, Console())
+    
+            # Create file and snapshot
+            main_py = Path(tmpdir) / "main.py"
+            main_py.write_text("original")
+            snapshot_manager.create_snapshot("task_1", {"main.py": "original"})
+    
+            # Initialize review
+            diff_metadata = {
+                "main.py": FileDiffMetadata(
+                    path="main.py",
+                    change_type=FileChangeType.MODIFIED,
+                    file_status=FileStatus.READABLE,
+                )
+            }
+            change_manager.initialize_review("task_1", diff_metadata)
+    
+            # Modify file
+            main_py.write_text("modified")
+    
+            # Reject
+            success, error = change_manager.reject_file("task_1", "main.py", require_confirmation=False)
+    
+>           assert success is True
+E           assert False is True
+
+tests/test_change_management_integration.py:324: AssertionError
+_____________________ TestBatchOperations.test_reject_all ______________________
+
+self = <test_change_management_integration.TestBatchOperations object at 0x7f8be31f96d0>
+workspace = PosixPath('/tmp/tmplfybdsaa')
+change_manager = <joy.diff_change_manager.DiffChangeManager object at 0x7f8be17bd010>
+
+    def test_reject_all(self, workspace, change_manager):
+        """Test rejecting all pending changes."""
+        # Create files
+        (workspace / "a.py").write_text("content a")
+        (workspace / "b.py").write_text("content b")
+    
+        # Snapshot
+        snapshot_manager = change_manager.snapshot_manager
+        snapshot_manager.create_snapshot("task_1", {
+            "a.py": "content a",
+            "b.py": "content b",
+        })
+    
+        # Initialize review
+        diff_metadata = {
+            "a.py": FileDiffMetadata(
+                path="a.py",
+                change_type=FileChangeType.MODIFIED,
+                file_status=FileStatus.READABLE,
+            ),
+            "b.py": FileDiffMetadata(
+                path="b.py",
+                change_type=FileChangeType.MODIFIED,
+                file_status=FileStatus.READABLE,
+            ),
+        }
+        change_manager.initialize_review("task_1", diff_metadata)
+    
+        # Modify files
+        (workspace / "a.py").write_text("modified a")
+        (workspace / "b.py").write_text("modified b")
+    
+        # Reject all
+        rejected, errors = change_manager.reject_all("task_1")
+    
+>       assert rejected == 2
+E       assert 0 == 2
+
+tests/test_change_management_integration.py:438: AssertionError
+__ TestSummaryAndStatusTracking.test_display_review_summary_with_mixed_status __
+
+self = <test_change_management_integration.TestSummaryAndStatusTracking object at 0x7f8be31fa490>
+change_manager = <joy.diff_change_manager.DiffChangeManager object at 0x7f8be179e2d0>
+
+    def test_display_review_summary_with_mixed_status(self, change_manager):
+        """Test displaying summary with mixed status."""
+        diff_metadata = {
+            "a.py": FileDiffMetadata(
+                path="a.py",
+                change_type=FileChangeType.CREATED,
+                file_status=FileStatus.READABLE,
+                lines_added=10,
+            ),
+            "b.py": FileDiffMetadata(
+                path="b.py",
+                change_type=FileChangeType.MODIFIED,
+                file_status=FileStatus.READABLE,
+                lines_added=5,
+                lines_removed=3,
+            ),
+        }
+    
+        change_manager.initialize_review("task_1", diff_metadata)
+        change_manager.accept_file("task_1", "a.py", require_confirmation=False)
+    
+        # Should not raise
+>       change_manager.display_review_summary("task_1")
+
+tests/test_change_management_integration.py:755: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <joy.diff_change_manager.DiffChangeManager object at 0x7f8be179e2d0>
+task_id = 'task_1', show_accepted = True, show_rejected = True
+
+    def display_review_summary(self, task_id: str, show_accepted: bool = True, show_rejected: bool = True) -> None:
+        """Display summary dari review state dengan colors dan formatting."""
+        if task_id not in self._review_states:
+            self.console.print("[red]No review state found[/red]")
+            return
+    
+        states = self._review_states[task_id].values()
+        summary = self.get_summary(task_id)
+    
+        # Title
+        title_text = Text("Review Summary", style="bold cyan")
+        stats = [
+            Text(f"Total: {summary['total']}", style="#95a5a6"),
+            Text(f"Pending: {summary['pending']}", style="yellow"),
+            Text(f"Accepted: {summary['accepted']}", style="green"),
+            Text(f"Rejected: {summary['rejected']}", style="red"),
+        ]
+        if summary['conflicts'] > 0:
+            stats.append(Text(f"Conflicts: {summary['conflicts']}", style="magenta"))
+    
+        stats_text = Text(" · ").join(stats)
+    
+        self.console.print(Panel(
+>           Text.assemble(title_text, "\n", Padding(stats_text, (0, 0, 0, 1))),
+                                            ^^^^^^^
+            border_style="#5c5c5c"
+        ))
+E       NameError: name 'Padding' is not defined
+
+src/joy/diff_change_manager.py:296: NameError
+_____________ TestCompleteAcceptRejectWorkflow.test_full_workflow ______________
+
+self = <test_change_management_integration.TestCompleteAcceptRejectWorkflow object at 0x7f8be31fa710>
+
+    def test_full_workflow(self):
+        """Test complete workflow from snapshot to accept/reject."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            workspace = Path(tmpdir)
+    
+            # 1. Create files
+            (workspace / "main.py").write_text("original")
+            (workspace / "utils.py").write_text("original utils")
+    
+            # 2. Create snapshot
+            snapshot_manager = DiffSnapshotManager(str(workspace))
+            snapshot_manager.create_snapshot("task_1", {
+                "main.py": "original",
+                "utils.py": "original utils",
+            })
+    
+            # 3. Initialize change manager
+            change_manager = DiffChangeManager(snapshot_manager, Console())
+            diff_metadata = {
+                "main.py": FileDiffMetadata(
+                    path="main.py",
+                    change_type=FileChangeType.MODIFIED,
+                    file_status=FileStatus.READABLE,
+                    lines_added=3,
+                    lines_removed=1,
+                ),
+                "utils.py": FileDiffMetadata(
+                    path="utils.py",
+                    change_type=FileChangeType.MODIFIED,
+                    file_status=FileStatus.READABLE,
+                    lines_added=2,
+                ),
+            }
+            change_manager.initialize_review("task_1", diff_metadata)
+    
+            # 4. Modify files (simulating agent work)
+            (workspace / "main.py").write_text("original\nnew line\nanother line\nmore")
+            (workspace / "utils.py").write_text("original utils\nnew util")
+    
+            # 5. Accept main.py
+            success, error = change_manager.accept_file("task_1", "main.py", require_confirmation=False)
+            assert success is True
+    
+            # 6. Check summary
+            summary = change_manager.get_summary("task_1")
+            assert summary['pending'] == 1
+            assert summary['accepted'] == 1
+    
+            # 7. Reject utils.py
+            success, error = change_manager.reject_file("task_1", "utils.py", require_confirmation=False)
+>           assert success is True
+E           assert False is True
+
+tests/test_change_management_integration.py:813: AssertionError
+__________ TestSnapshotCreation.test_create_snapshot_with_binary_file __________
+
+self = <test_diff_change_management.TestSnapshotCreation object at 0x7f8be1731090>
+snapshot_manager = <src.joy.diff_snapshot_manager.DiffSnapshotManager object at 0x7f8bdb3aac10>
+temp_workspace = PosixPath('/tmp/tmp_ygq_wsz')
+
+    def test_create_snapshot_with_binary_file(self, snapshot_manager, temp_workspace):
+        """Test snapshot creation dengan binary file."""
+        files = {
+            "image.png": None,  # Binary, not readable
+            "text.txt": "hello",
+        }
+    
+        task_id = "task_002"
+        snapshot_manager.create_snapshot(task_id, files)
+    
+        snapshot = snapshot_manager._snapshots[task_id]
+>       assert snapshot["image.png"].file_status == FileStatus.BINARY.value
+E       AssertionError: assert 'not_found' == 'binary'
+E         
+E         - binary
+E         + not_found
+
+tests/test_diff_change_management.py:92: AssertionError
+_________________ TestEdgeCases.test_snapshot_empty_workspace __________________
+
+self = <test_diff_change_management.TestEdgeCases object at 0x7f8be1732350>
+snapshot_manager = <src.joy.diff_snapshot_manager.DiffSnapshotManager object at 0x7f8be04cb450>
+temp_workspace = PosixPath('/tmp/tmpwwohri4h')
+
+    def test_snapshot_empty_workspace(self, snapshot_manager, temp_workspace):
+        """Test snapshot on empty workspace."""
+        task_id = "task_empty"
+        success = snapshot_manager.create_snapshot(task_id, {})
+    
+>       assert success  # Empty snapshots are valid
+        ^^^^^^^^^^^^^^
+E       assert False
+
+tests/test_diff_change_management.py:521: AssertionError
+___________________ TestDiffUIBasic.test_get_symbol_unicode ____________________
+
+self = <test_diff_ui.TestDiffUIBasic object at 0x7f8be17a91d0>
+diff_ui = <src.joy.diff_ui.DiffUI object at 0x7f8bdb3aa0d0>
+
+    def test_get_symbol_unicode(self, diff_ui):
+        """Test symbol generation dengan unicode support."""
+        symbol = diff_ui._get_symbol(FileChangeType.CREATED)
+>       assert symbol in ["✨", "[+]"]  # Should be unicode atau ascii fallback
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert '•' in ['✨', '[+]']
+
+tests/test_diff_ui.py:118: AssertionError
+=============================== warnings summary ===============================
+.venv/lib64/python3.13/site-packages/docstring_parser/attrdoc.py:17
+  /home/fajrul/learn/joy-starter/.venv/lib64/python3.13/site-packages/docstring_parser/attrdoc.py:17: DeprecationWarning: ast.NameConstant is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    ast.NameConstant: "value",
+
+.venv/lib64/python3.13/site-packages/docstring_parser/attrdoc.py:18
+  /home/fajrul/learn/joy-starter/.venv/lib64/python3.13/site-packages/docstring_parser/attrdoc.py:18: DeprecationWarning: ast.Num is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    ast.Num: "n",
+
+.venv/lib64/python3.13/site-packages/docstring_parser/attrdoc.py:19
+  /home/fajrul/learn/joy-starter/.venv/lib64/python3.13/site-packages/docstring_parser/attrdoc.py:19: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    ast.Str: "s",
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_change_management_integration.py::TestChangeManagement::test_reject_file
+FAILED tests/test_change_management_integration.py::TestBatchOperations::test_reject_all
+FAILED tests/test_change_management_integration.py::TestSummaryAndStatusTracking::test_display_review_summary_with_mixed_status
+FAILED tests/test_change_management_integration.py::TestCompleteAcceptRejectWorkflow::test_full_workflow
+FAILED tests/test_diff_change_management.py::TestSnapshotCreation::test_create_snapshot_with_binary_file
+FAILED tests/test_diff_change_management.py::TestEdgeCases::test_snapshot_empty_workspace
+FAILED tests/test_diff_ui.py::TestDiffUIBasic::test_get_symbol_unicode - Asse...
+================== 7 failed, 161 passed, 3 warnings in 13.22s ==================

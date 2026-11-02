@@ -2,6 +2,7 @@
 
 import asyncio
 import queue
+import re
 import sys
 import time
 
@@ -23,6 +24,8 @@ from rich.text import Text
 from joy.llm import INTERRUPTED_NOTE, SYSTEM_PROMPT, LLMError, StreamWorker, load_config
 from joy.diff_commands import DiffCommandHandler
 from joy.diff_config import DiffConfig
+from dataclasses import dataclass, field
+from typing import Optional
 
 GRAY = "#393939"
 BORDER = "#5c5c5c"
@@ -31,9 +34,82 @@ SPINNER = "\u280b\u2819\u2839\u2838\u283c\u2834\u2826\u2827\u2807\u280f"
 POLL_INTERVAL = 0.03
 
 
+@dataclass
+class DelegationEvent:
+    """Represents a delegation event from the LLM worker."""
+    task_id: str
+    """Unique task identifier."""
+    
+    agent_name: str
+    """Name of the delegated sub-agent."""
+    
+    status: str
+    """Task status: queued, running, completed, failed, timeout, cancelled, blocked."""
+    
+    start_time: Optional[float] = None
+    """Unix timestamp when task started."""
+    
+    end_time: Optional[float] = None
+    """Unix timestamp when task ended."""
+    
+    result: Optional[dict] = None
+    """Task result/output as dict."""
+    
+    error: Optional[str] = None
+    """Error message if task failed."""
+    
+    @classmethod
+    def from_payload(cls, payload: dict) -> "DelegationEvent":
+        """Parse event payload into DelegationEvent."""
+        return cls(
+            task_id=payload.get("task_id", ""),
+            agent_name=payload.get("agent_name", "sub_agent"),
+            status=payload.get("status", "unknown"),
+            start_time=payload.get("start_time"),
+            end_time=payload.get("end_time"),
+            result=payload.get("result"),
+            error=payload.get("error"),
+        )
+
+
+def sanitize_error(error_str: str) -> str:
+    """Remove sensitive information from error messages.
+    
+    Removes patterns like API keys, Bearer tokens, passwords, etc.
+    """
+    if not error_str:
+        return error_str
+    
+    # Patterns to redact
+    patterns = [
+        (r'sk-[A-Za-z0-9\-_]{20,}', '[API_KEY_REDACTED]'),  # OpenAI format (min 20 chars)
+        (r'Bearer [A-Za-z0-9\-_.]+', '[BEARER_TOKEN_REDACTED]'),
+        (r'api_key\s*=\s*[\'"][^\'"]+[\'"]', 'api_key=[REDACTED]'),
+        (r'password\s*=\s*[\'"][^\'"]+[\'"]', 'password=[REDACTED]'),
+        (r'token\s*=\s*[\'"][^\'"]+[\'"]', 'token=[REDACTED]'),
+    ]
+    
+    result = error_str
+    for pattern, replacement in patterns:
+        result = re.sub(pattern, replacement, result)
+    
+    return result
+
+
 def build_session(state: dict | None = None) -> PromptSession:
     """Gray input area, with the Thinking indicator or streaming reply above it."""
-    state = {"waiting": False, "response": ""} if state is None else state
+    if state is None:
+        state = {
+            "waiting": False,
+            "response": "",
+            "delegations": {},      # {task_id: DelegationEvent}
+            "active_tasks": set(),  # Set[str] of running task IDs
+        }
+    else:
+        # Ensure new keys exist if state is provided
+        state.setdefault("delegations", {})
+        state.setdefault("active_tasks", set())
+    
     waiting = Condition(lambda: bool(state.get("waiting")))
     bindings = KeyBindings()
 
@@ -77,6 +153,34 @@ def build_session(state: dict | None = None) -> PromptSession:
         style = "class:tool-failed" if status == "failed" else "class:tool"
         return [(style, f" \u2699 {name} \u00b7 {status}")]
 
+    def delegation_status() -> list[tuple[str, str]]:
+        """Display active delegations in format: ⧘ Analyzer [running] · Reviewer [queued]"""
+        delegations = state.get("delegations", {})
+        if not delegations:
+            return []
+        
+        items = []
+        for task_id, task_info in delegations.items():
+            if isinstance(task_info, dict):
+                name = task_info.get("agent_name", f"Task{task_id[:4]}")
+                status = task_info.get("status", "unknown")
+            else:  # DelegationEvent object
+                name = task_info.agent_name
+                status = task_info.status
+            
+            style = "class:delegation-failed" if status in ["failed", "timeout"] else "class:delegation"
+            items.append((style, f"{name} [{status}]"))
+        
+        if items:
+            # Combine items with separator
+            result = [("class:delegation", " \u2317 ")]  # ⧘ symbol
+            result.append(items[0])
+            for item in items[1:]:
+                result.append(("", " \u00b7 "))  # · separator
+                result.append(item)
+            return result
+        return []
+
     session: PromptSession = PromptSession(
         erase_when_done=True,
         multiline=True,
@@ -90,6 +194,8 @@ def build_session(state: dict | None = None) -> PromptSession:
             "thinking": "#808080",
             "tool": "#808080",
             "tool-failed": "#d75f5f",
+            "delegation": "#87ceeb",  # Sky blue for delegations
+            "delegation-failed": "#d75f5f",  # Red for failed delegations
         }),
     )
     window = session.layout.current_window
@@ -111,6 +217,10 @@ def build_session(state: dict | None = None) -> PromptSession:
             Window(FormattedTextControl(tool_status), height=1, dont_extend_height=True),
             filter=waiting & Condition(lambda: bool(state.get("tool"))),
         ),
+        ConditionalContainer(
+            Window(FormattedTextControl(delegation_status), height=1, dont_extend_height=True),
+            filter=waiting & Condition(lambda: bool(state.get("delegations"))),
+        ),
         Frame(session.layout.container),
     ])
     return session
@@ -129,7 +239,7 @@ def stream_turn(session: PromptSession, state: dict, messages: list[dict], draft
     """
     worker = StreamWorker(messages)
     state.update(waiting=True, response="", outcome=None, error=None, tool=None,
-                 used_tools=False)
+                 used_tools=False, delegations={}, active_tasks=set())
 
     async def consume() -> None:
         while True:
@@ -144,6 +254,15 @@ def stream_turn(session: PromptSession, state: dict, messages: list[dict], draft
                 continue
             if kind == "tool":
                 state["tool"] = payload
+                session.app.invalidate()
+                continue
+            if kind == "delegation":
+                event = DelegationEvent.from_payload(payload)
+                state["delegations"][event.task_id] = event
+                if event.status in ("queued", "running"):
+                    state["active_tasks"].add(event.task_id)
+                else:
+                    state["active_tasks"].discard(event.task_id)
                 session.app.invalidate()
                 continue
             state["outcome"] = kind

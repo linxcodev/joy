@@ -158,7 +158,7 @@ class LLMTest(Workspace, unittest.TestCase):
         self.assertEqual(request["include"], ["reasoning.encrypted_content"])
         self.assertIs(request["store"], False)
         self.assertTrue(request["stream"])
-        self.assertEqual({t["name"] for t in request["tools"]}, {"read", "write", "edit", "bash"})
+        self.assertEqual({t["name"] for t in request["tools"]}, {"read", "write", "edit", "bash", "delegate"})
         self.assertTrue(all(t["strict"] is False for t in request["tools"]))
 
     def test_refusal_text(self):

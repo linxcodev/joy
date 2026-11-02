@@ -170,7 +170,7 @@ class ToolTest(unittest.TestCase):
 
     def test_schemas_for_responses(self):
         specs = {spec["name"]: spec for spec in tools.response_tools()}
-        self.assertEqual(set(specs), {"read", "write", "edit", "bash"})
+        self.assertEqual(set(specs), {"read", "write", "edit", "bash", "delegate"})
         for spec in specs.values():
             self.assertEqual(spec["type"], "function")
             self.assertIs(spec["strict"], False)

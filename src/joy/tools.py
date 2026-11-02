@@ -1,8 +1,10 @@
-"""Joy's coding tools: read, write, edit and bash, registered with aisuite's Tools.
+"""Joy's coding tools: read, write, edit, bash, and delegate, registered with aisuite's Tools.
 
 File paths are resolved against the launch directory (ROOT) and may not escape
 it, including through symlinks. bash is NOT confined by these checks: it runs
 with the user's full permissions in ROOT.
+
+The delegate tool allows the main agent to delegate tasks to sub-agents.
 """
 
 import difflib
@@ -20,6 +22,7 @@ from contextlib import suppress
 from pathlib import Path
 
 from aisuite.utils.tools import Tools
+from joy.delegation import delegate
 
 ROOT = Path.cwd().resolve()
 MAX_FILE_BYTES = 2 * 1024 * 1024
@@ -339,7 +342,7 @@ def _kill_group(process: subprocess.Popen) -> None:
             continue
 
 
-TOOLS = Tools([read, write, edit, bash])
+TOOLS = Tools([read, write, edit, bash, delegate])
 
 
 def response_tools() -> list[dict]:
@@ -358,7 +361,14 @@ def run_tool(name: str, arguments: str, cancel: threading.Event | None = None) -
         if not isinstance(args, dict):
             raise ToolError("Arguments must be a JSON object.")
         result = TOOLS.execute({"function": {"name": name, "arguments": args}})[0]
-        return truncate(str(result)), True
+        result_str = str(result)
+        
+        # Special handling for delegation results: format for readability
+        if name == "delegate":
+            from joy.delegation import format_delegation_result
+            result_str = format_delegation_result(result_str)
+        
+        return truncate(result_str), True
     except json.JSONDecodeError as exc:
         return f"Error: arguments are not valid JSON ({exc}).", False
     except ToolError as exc:
